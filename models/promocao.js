@@ -19,10 +19,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Promocao.init(
     {
-      EmpresaId : DataTypes. INTEGER,
+      EmpresaId : DataTypes.INTEGER,
       nome: DataTypes.STRING,
       descricao: DataTypes.STRING,
-      vaidade: DataTypes.DATEONLY
+      validade: DataTypes.DATEONLY
     },
     {
       sequelize,

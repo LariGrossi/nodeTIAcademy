@@ -39,8 +39,8 @@ app.post('/cliente', async(req, res) =>{
 
 app.post('/cliente/:id/cartao', async(req, res)=>{
     const cart = {        
-        dataCartao: req.body.data,
-        validade: req.body.data,
+        dataCartao: req.body.dataCartao,
+        validade: req.body.validade,
         ClienteId: req.params.id
     };
     if ( ! await cliente.findByPk(req.params.id)){
@@ -103,10 +103,31 @@ app.post('/cliente/:id/cartao', async(req, res)=>{
   });
 
 
+  app.post('/empresa', async(req, res) =>{
+    await empresa.create(
+      req.body
+      ).then(emp =>{
+        return res.json({
+          error: false,
+          message: "Empresa cadastrada com sucesso.",
+          emp
+        });
+      }).catch(erro=>{
+        return res.status(400).json({
+          error: true,
+          message: "Problema de conexão com a API.",
+        });
+      });
+  });
+  
+
+
   app.post('/empresa/:id/promocao', async(req, res)=>{
-    const emp = {
+    const pro = {
+      EmpresaId :req.params.id,
       nome: req.body.nome,
-      dataAdesao: req.body.data
+      descricao: req.body.descricao,
+      validade: req.body.validade
     };
     if ( ! await empresa.findByPk(req.params.id)){
         return res.status(400).json({
@@ -115,42 +136,12 @@ app.post('/cliente/:id/cartao', async(req, res)=>{
         });
     };
 
-    await empresa.create(emp)
-    .then(empcli =>{
-        return res.json({
-          error: false,
-          message: "Empresa foi inserida com sucesso.",
-          empcli
-        });
-}).catch(erro=>{
-    return res.status(400).json({
-      error: true,
-      message: "Problema de conexão com a API.",
-    });
-  });
-  });
-
-
-  app.post('/promocao/:id/empresa', async(req, res)=>{
-    const pro = {
-      EmpresaId :req.params.idempresa,
-      nome: req.body.nome,
-      descricao: req.body.descricao,
-      vaidade: req.body.data
-    };
-    if ( ! await promocao.findByPk(req.params.idempresa)){
-        return res.status(400).json({
-            error: true,
-            message: "Promoção não existe."
-        });
-    };
-
     await promocao.create(pro)
-    .then(procli =>{
+    .then(proemp =>{
         return res.json({
           error: false,
           message: "Promoção foi inserida com sucesso.",
-          procli
+          proemp
         });
 }).catch(erro=>{
     return res.status(400).json({
